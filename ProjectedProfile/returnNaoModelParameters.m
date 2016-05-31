@@ -65,7 +65,7 @@ function [M, L] = returnNaoModelParameters()
 	% from the Nao documentation
 	body_length = -23 + 126.5 + 85;
 	thigh_length = 100;
-	% humerus_length = 105;
+	humerus_length = 105;
 	% Length of humerus when projected onto the saggital plane
 	projected_humerus_length = 89.75;
 	tibia_length = 102.9;
@@ -82,3 +82,4 @@ function [M, L] = returnNaoModelParameters()
 	L(3) = thigh_length;
 	L(4) = body_length;
 	L(5) = projected_humerus_length;
+	L(6) = humerus_length;

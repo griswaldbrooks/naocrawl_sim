@@ -22,6 +22,12 @@ function startNaoCrawl(clientID, vrep, jointSequence, t)
 	% Griswald Brooks
 	% griswald.brooks@gmail.com
 	
+	% Get path for saving torques.
+	[foldername, ~, ~] = fileparts(mfilename('fullpath'));
+	cd(foldername);
+	cd('..');
+	foldername = pwd;
+
 	% Initialize global parameters
 	if(g_initGlobalParameters(clientID, vrep))
 
@@ -82,7 +88,7 @@ function startNaoCrawl(clientID, vrep, jointSequence, t)
 		end
 
 		% Save torque values to csv file
-		csvwrite('temp/vrepn_Torquesm.txt', recordedTorques);
+		csvwrite(fullfile(foldername, 'temp',['vrepn_Torquesm_',num2str(t(end)),'.txt']), recordedTorques);
 
 	end
 
@@ -497,11 +503,63 @@ function jointMap = crawl_ppArrayToJointMap(pp_Angles, pp_alpha)
 	jointMap('RShoulderRoll') = -naoShoulderRoll;
 	jointMap('LShoulderRoll') =  naoShoulderRoll;
 
-	naoElbowYaw = pi/2;
+	[naoElbowRoll, naoElbowYaw] = computeElbowAngles(pp_alpha);
+
+	% naoElbowYaw = pi/2;
 	jointMap('RElbowYaw') =  naoElbowYaw;
 	jointMap('LElbowYaw') = -naoElbowYaw;
 
-	naoElbowRoll = deg2rad(87);
+	% naoElbowRoll = deg2rad(87);
 	jointMap('RElbowRoll') =  naoElbowRoll;
 	jointMap('LElbowRoll') = -naoElbowRoll;
 
+function [elbowRoll, elbowYaw] = computeElbowAngles(pp_alpha)
+	% Takes the alpha angle according to the projected profile
+	% crawling method and returns the elbow roll and yaw to be sent to V-REP Nao.
+	% 
+	%   Outputs:
+	%		
+	%		elbowRoll		The elbow roll angle in radians.
+	%
+	%		elbowYaw		The elbow yaw angle in radians.
+	%
+	%	Inputs:
+	%
+	%		pp_alpha	Orientation of the projected profile elbow
+	%
+	% Griswald Brooks
+	% griswald.brooks@gmail.com
+
+	% Get the Nao parameters.
+	[M, L] = returnNaoModelParameters();
+
+	% The length of the humerus projected onto the z-x plane.
+	lhw = L(5);
+	% The length of the humerus.
+	lh = L(6);
+
+	% The distance from the shoulder to the elbow in the y-axis.
+	d = sqrt(lh^2 - lhw^2);
+
+	% The direction the forearm is required to point.
+	vf = [1, 0, 0]';
+
+	% The direction vector of the humerus, which is the axis of rotation of the elbow yaw.
+	vh = [lhw*cos(pp_alpha), -d, lhw*sin(pp_alpha)]';
+	vh = vh/lh;
+
+	% The direction vector of the axis of the elbow roll, when elbow yaw is zero.
+	nh = [-sin(pp_alpha), 0, cos(pp_alpha)]';
+
+	% Compute elbow roll, the amount to rotate vh to get to vf.
+	elbowRoll = acos(dot(vh, vf));
+
+	%%% Compute elbow yaw, the amount to rotate the forearm around vh to align nh with u.
+	% The direction vector needed that rotates vh onto vf.
+	% u is the vector nh needs to be rotated to so vh can be
+	% rotated onto vf.
+	u = cross(vh, vf);
+	u = u/norm(u);
+
+	% Compute the angle betwwen nh and u.
+	elbowYaw = acos(dot(nh, u));

@@ -53,18 +53,13 @@ disp('Computing joint trajectory.');
 [t, q] = generatePKGASequence(qi, qf, ti, tf, dt);
 
 % Save torque values to csv file
-csvwrite(fullfile(foldername, 'temp', 'pp_Anglesm.txt'), [t,q]);	
+csvwrite(fullfile(foldername, 'temp', 'pp_Anglesm.txt'), [t, q]);	
 
 input('Simulation computed. Press "Enter" to animate.');
 
 % Show animation of gait
 USER_ITERATED = false;
 generateAnimation(q, t, USER_ITERATED);
-
-% input('Simulation plotted. Press enter to plot additional graphs.');
-
-% Show error and data plots
-%generatePlots();
 
 %%% Send joint sequence to V-REP %%%
 
@@ -76,15 +71,22 @@ disp('Connecting to simulator.');
 [clientID, vrep] = connectToVREP();
 
 if (clientID > -1)
-	disp('Connected to simulator.');
-	% Send sequence
-	disp('Sending joint sequence.');
- 	startNaoCrawl(clientID, vrep, q, t);
+  disp('Connected to simulator.');
+  % Send sequence
+  disp('Sending joint sequence.');
+  for n = 1:10
+    startNaoCrawl(clientID, vrep, q, n*t);
+  end
 
-	% Disconnect from simulator
-	disconnectFromVREP(clientID, vrep);
-	disp('Simulation terminated.');
+  % Disconnect from simulator
+  disconnectFromVREP(clientID, vrep);
+  disp('Simulation terminated.');
 
-else	
-	disp('Could not connect to simulator.');
+else  
+  disp('Could not connect to simulator.');
 end
+
+input('Simulation complete. Press enter to plot additional graphs.');
+
+% Show error and data plots
+generatePlots();

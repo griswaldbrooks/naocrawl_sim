@@ -1,7 +1,12 @@
 function generatePlots()
 
+% Get path to torques.
+[foldername, ~, ~] = fileparts(mfilename('fullpath'));
+cd(foldername);
+cd('..');
+
 % Plot joint torques and save plot to file
-vrepTorques = csvread('temp/vrepn_Torquesm.txt',1,0);
+vrepTorques = csvread(fullfile(pwd, 'temp', 'vrepn_Torquesm.txt'), 1, 0);
 
 figure(1)
 plot(vrepTorques)

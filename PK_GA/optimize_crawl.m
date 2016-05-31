@@ -1,7 +1,7 @@
 % Path to joint torque table
 [foldername, ~, ~] = fileparts(mfilename('fullpath'));
-cd(foldername)
-cd('..')
+cd(foldername);
+cd('..');
 addpath(fullfile(pwd, 'Data'));
 
 % Grab the torque data.

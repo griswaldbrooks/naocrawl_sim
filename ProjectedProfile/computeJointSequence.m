@@ -28,7 +28,7 @@ function [t, q] = computeJointSequence(qi, qf, ti, tf, dt)
 
 	% Generate joint angles via constant theta3, theta4 and
 	% linearly interpolating alpha
-	[t,q] = computeJointSequenceLinearAlpha(ti, tf, dt);
+	[t, q] = computeJointSequenceLinearAlpha(ti, tf, dt);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -380,7 +380,7 @@ function c = returnCostCfgVector(theta_cfg)
 	% Calculate the final state cost
 	c =  (1 - k)*tau_cost + k*theta_cfg_err;
 
-function [t,q] = computeJointSequenceLinearAlpha(ti, tf, dt)
+function [t, q] = computeJointSequenceLinearAlpha(ti, tf, dt)
 	% Heuristic based sequence generator. Generates a joint sequence by holding
 	% theta3 and theta4 constant and linearly interpolating through alpha
 	% from -30 degrees to -90 degrees.
@@ -406,16 +406,13 @@ function [t,q] = computeJointSequenceLinearAlpha(ti, tf, dt)
 	%%% Calculate time-state sequence %%%
 
 	% Compute time vector
-	t = ti:dt:tf;
+	t = (ti:dt:tf)';
 
 	% The elbow angle alpha ranges from -30 degrees to -90 degrees. 
 	% Alternatively, it should be calculated from qi and qf because
 	% alpha is equal to the sum of the joint angles.
 	alpha_i = deg2rad(-30);
 	alpha_f = deg2rad(-90);
-	% Iteration increment is so that alpha_i corresponds to ti
-	% and alpha_f corresponds to tf
-	alpha_inc = (alpha_f - alpha_i)/length(t);
 
 	% Set theta3 theta4 constant
 	theta3 = deg2rad(16.5);
@@ -423,12 +420,12 @@ function [t,q] = computeJointSequenceLinearAlpha(ti, tf, dt)
 
 	% Initialize joint angle vector
 	N = 5; % Number of joint variables [theta1, theta2, theta3, theta4, theta5]
-	q = zeros(length(t),N);
+	q = zeros(length(t), N);
 	q_itr = 1;
 
 	% Compute joint angles
 	% Method of computing joint angles by linearly iterating through alpha
-	for alpha = alpha_i:alpha_inc:alpha_f
+	for alpha = linspace(alpha_i, alpha_f, length(t))
 
 		% Set configuration angles
 		theta_cfg = [theta3, theta4, alpha]';
