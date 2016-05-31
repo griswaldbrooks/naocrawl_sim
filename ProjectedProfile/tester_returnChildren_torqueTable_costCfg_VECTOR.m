@@ -2,10 +2,13 @@ function tester_returnChildren_torqueTable_costCfg_VECTOR()
 	% Quick script to test the returnChildren function
 	
 	% Include requisite libraries
-	addpath('../npermutek');
+	[foldername, ~, ~] = fileparts(mfilename('fullpath'));
+	cd(foldername)
+	cd('..')
+	addpath(fullfile(pwd, 'npermutek'));
 
 	% Initialize torque function
-	nameOfTorqueTableFile = '../Data/vrep3_TorqueTable1_2_5deg.txt';
+	nameOfTorqueTableFile = fullfile(pwd, 'Data','vrep3_TorqueTable1_2_5deg.txt');
 	g_initTorqueFromTable(nameOfTorqueTableFile);
 
 	% Initial alpha

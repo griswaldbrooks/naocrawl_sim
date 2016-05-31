@@ -7,28 +7,30 @@
 % run as a MATLAB plot and a V-REP simulation
 %
 % Griswald Brooks
-% griswald.brooks@gmail.com	
+% griswald.brooks@gmail.com 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%% Include Robot Libraries %%%
-% Library for plotting robots in MATLAB
-addpath(fullfile(pwd, 'RobotPlotting'));
-% Library to use V-REP with MATLAB
-addpath(fullfile(pwd, 'V-RepApi'));
-% Projected Profile Library
-addpath(fullfile(pwd, 'ProjectedProfile'));
-% PK Genetic Optimization
-addpath(fullfile(pwd, 'PK_GA'));
-% Temp
-addpath(fullfile(pwd, 'temp'));
-
 
 % Reset plotting and variable spaces
 cla, clc, clear all
 % Set global plotting rules
 axis equal
 hold all
+
+%%% Include Robot Libraries %%%
+[foldername, ~, ~] = fileparts(mfilename('fullpath'));
+% Library for plotting robots in MATLAB
+addpath(genpath(fullfile(foldername, 'RobotPlotting')));
+% Library to use V-REP with MATLAB
+addpath(genpath(fullfile(foldername, 'V-RepApi')));
+% Projected Profile Library
+addpath(genpath(fullfile(foldername, 'ProjectedProfile')));
+% PK Genetic Optimization
+addpath(genpath(fullfile(foldername, 'PK_GA')));
+% Temp
+addpath(genpath(fullfile(foldername, 'temp')));
+
+
 
 % Projected Profile Nao joint variables in radians
 % q = [theta1, theta2, theta3, theta4, theta5]
@@ -51,7 +53,7 @@ disp('Computing joint trajectory.');
 [t, q] = generatePKGASequence(qi, qf, ti, tf, dt);
 
 % Save torque values to csv file
-csvwrite(fullfile(pwd, 'temp', 'pp_Anglesm.txt'), [t,q]);	
+csvwrite(fullfile(foldername, 'temp', 'pp_Anglesm.txt'), [t,q]);	
 
 input('Simulation computed. Press "Enter" to animate.');
 

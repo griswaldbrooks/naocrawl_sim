@@ -11,10 +11,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Include Robot Libraries %%%
+[foldername, ~, ~] = fileparts(mfilename('fullpath'));
 % Library to use V-REP with MATLAB
-addpath('V-RepApi');
+addpath(genpath(fullfile(foldername, 'V-RepApi')));
 % Projected Profile Library
-addpath('ProjectedProfile');
+addpath(genpath(fullfile(foldername, 'ProjectedProfile')));
 
 
 % Reset plotting and variable spaces

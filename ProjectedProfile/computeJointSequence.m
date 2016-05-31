@@ -469,10 +469,13 @@ function [t,q] = computeJointSequenceDPTorqueTable(ti, tf, dt)
 	t = ti:dt:tf;
 
 	% Include requisite libraries
-	addpath('npermutek');
+	[foldername, ~, ~] = fileparts(mfilename('fullpath'));
+	cd(foldername)
+	cd('..')
+	addpath(fullfile(pwd, 'npermutek'));
 
 	% Initialize torque function
-	nameOfTorqueTableFile = '../Data/vrep3_TorqueTable1_2_5deg.txt';
+	nameOfTorqueTableFile = fullfile(pwd, 'Data','vrep3_TorqueTable1_2_5deg.txt');
 	g_initTorqueFromTable(nameOfTorqueTableFile);	
 
 	% The elbow angle alpha ranges from -30 degrees to -90 degrees. 

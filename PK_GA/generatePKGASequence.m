@@ -27,7 +27,10 @@ function [t, q] = generatePKGASequence(theta_cfg_i, theta_cfg_f, ti, tf, dt)
 	% griswald.brooks@gmail.com
 
 	% Projected Profile
-	addpath(fullfile(pwd,'..','Code','ProjectedProfile'));
+	[foldername, ~, ~] = fileparts(mfilename('fullpath'));
+	cd(foldername)
+	cd('..')
+	addpath(fullfile(pwd, 'ProjectedProfile'));
 
 	%%% Right now everything is constant until it can be generatized %%%
 	t_step = 0.01;

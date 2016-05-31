@@ -5,10 +5,14 @@ function [c]  = optimize_crawl_fn(x)
   global x_init x_final t 
   global alpha_min alpha_max theta3_min theta3_max theta4_min theta4_max
 
+  [foldername, ~, ~] = fileparts(mfilename('fullpath'));
+  cd(foldername)
+  cd('..')
+
   % Projected Profile Library
-  addpath(genpath(fullfile('..','ProjectedProfile')));
+  addpath(fullfile(pwd, 'ProjectedProfile')));
   % Library for plotting robots in MATLAB (has Dh function)
-  addpath(genpath(fullfile('..','RobotPlotting')));
+  addpath(fullfile(pwd, 'RobotPlotting')));
 
   % calculate time sequence of angle values for (\alpha, \theta_3, \theta_4)
   % corresponding to cubic spline coefficients given in x

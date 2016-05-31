@@ -1,8 +1,11 @@
 % Path to joint torque table
-addpath(genpath(fullfile('..','Data')));
+[foldername, ~, ~] = fileparts(mfilename('fullpath'));
+cd(foldername)
+cd('..')
+addpath(fullfile(pwd, 'Data'));
 
 % Grab the torque data.
-tq = load('vrep3_TorqueTable1_5deg.txt');
+tq = load(fullfile(pwd, 'Data', 'vrep3_TorqueTable1_5deg.txt'));
 
 % Global variables for function communication.
 global X1 X2 X3 T1 T2 T3 T4 

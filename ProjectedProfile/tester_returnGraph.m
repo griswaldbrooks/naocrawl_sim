@@ -2,10 +2,13 @@ function tester_returnGraph()
 	% Quick script to test the function of the returnGraph function.
 
 	% Include requisite libraries
-	addpath('../npermutek');
+	[foldername, ~, ~] = fileparts(mfilename('fullpath'));
+	cd(foldername)
+	cd('..')
+	addpath(fullfile(pwd, 'npermutek'));
 
 	% Initialize torque function
-	nameOfTorqueTableFile = '../Data/vrep3_TorqueTable1_2_5deg.txt';
+	nameOfTorqueTableFile = fullfile(pwd, 'Data','vrep3_TorqueTable1_2_5deg.txt');
 	g_initTorqueFromTable(nameOfTorqueTableFile);
 
 	% Set initial joint configuration

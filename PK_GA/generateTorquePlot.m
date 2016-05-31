@@ -32,10 +32,13 @@ function [t, tau] = generateTorquePlot(cfgInit, splineCoeff)
 
 	%%% Create Torque Function %%%
 	% Path to joint torque table.
-	addpath('Data');
+	[foldername, ~, ~] = fileparts(mfilename('fullpath'));
+	cd(foldername)
+	cd('..')
+	addpath(fullfile(pwd, 'Data'));
 
 	% Grab the torque data.
-	tq = load('vrep3_TorqueTable1_5deg.txt');
+	tq = load(fullfile(pwd, 'Data', 'vrep3_TorqueTable1_5deg.txt'));
 
 	% Torque table interpolation variables.
 	X1 = tq(:,6); 		% alpha
