@@ -49,8 +49,8 @@ ti = 0;
 disp('Computing joint trajectory.');
 
 % Compute joint trajectory
-% [t, q] = computeJointSequence(qi, qf, ti, tf, dt);
-[t, q] = generatePKGASequence(qi, qf, ti, tf, dt);
+[t, q] = computeJointSequence(qi, qf, ti, tf, dt);
+% [t, q] = generatePKGASequence(qi, qf, ti, tf, dt);
 
 % Save torque values to csv file
 csvwrite(fullfile(foldername, 'temp', 'pp_Anglesm.txt'), [t, q]);	
@@ -74,9 +74,8 @@ if (clientID > -1)
   disp('Connected to simulator.');
   % Send sequence
   disp('Sending joint sequence.');
-  for n = 1:10
-    startNaoCrawl(clientID, vrep, q, n*t);
-  end
+
+  startNaoCrawl(clientID, vrep, q, t);
 
   % Disconnect from simulator
   disconnectFromVREP(clientID, vrep);
